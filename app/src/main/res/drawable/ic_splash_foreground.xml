@@ -7,8 +7,8 @@
     <group
         android:scaleX="0.5"
         android:scaleY="0.5"
-        android:translateX="250"
-        android:translateY="250"
+        android:translateX="256"
+        android:translateY="256"
         >
         <path
             android:fillColor="#ED8F27"

@@ -22,7 +22,7 @@
             android:name=".activity.BookSerachActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.RegisterActivity"
+            android:name=".activity.SignUpActivity"
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"

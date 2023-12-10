@@ -9,11 +9,11 @@ import com.teamnova.bookday.R;
 /**
  * 회원가입 액티비티
  */
-public class RegisterActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_signup);
     }
 }

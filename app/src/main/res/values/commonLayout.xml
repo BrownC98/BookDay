@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 모든 레이아웃에 공통적으로 적용되는 스타일 최상위 레이아웃에 적용-->
+<resources>
+    <style name="rootLayout">
+        <item name="android:padding">16dp</item>
+    </style>
+</resources>
