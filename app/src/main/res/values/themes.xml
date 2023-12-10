@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.BookDay" parent="Base.Theme.BookDay" />
+
+    <style name="Theme.TeamNova.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splashimage</item>
+        <item name="postSplashScreenTheme">@style/Theme.BookDay</item>
+    </style>
 </resources>

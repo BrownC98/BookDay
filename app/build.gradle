@@ -24,7 +24,7 @@ android {
         buildConfigField("String", "KAKAO_REST_API_KEY", properties["kakao_rest_api_key"] as String)
 
         // 매니페스트에 사용될 변수
-        // 매니페스트에 문자열을 참조할 때는 따옴표 기호(")도 문자열에 포함시켜버리기 때문에 따옴표 기호를 없애는 연산이 추가적으로 필요함
+        // 코틀린 문법을 사용시 매니페스트에 문자열을 참조할 때는 따옴표 기호(")도 문자열에 포함시켜버리기 때문에 따옴표 기호를 없애는 연산이 추가적으로 필요함
         manifestPlaceholders["KAKAO_NATIVE_API_KEY"] = (properties["kakao_native_api_key"] as String).replace("\"", "")
     }
 
