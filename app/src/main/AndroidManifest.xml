@@ -16,6 +16,9 @@
         android:theme="@style/Theme.BookDay"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.MyBooksActivity"
             android:exported="false" />
         <activity
@@ -27,15 +30,13 @@
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.TeamNova.Splash"
-            >
+            android:theme="@style/Theme.TeamNova.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- 카카오 로그인을 위한 액티비티 -->
+        </activity> <!-- 카카오 로그인을 위한 액티비티 -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">

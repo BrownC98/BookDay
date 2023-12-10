@@ -6,137 +6,156 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    style="@style/rootLayout"
     tools:context=".activity.LoginActivity">
 
 
+    <ImageView
+        android:id="@+id/iv_login_ad"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:padding="8dp"
+        android:background="@drawable/view_boarder"
+        android:src="@drawable/bookstore_yes24"
+        />
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/imageView_login_logo"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@mipmap/ic_splash" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="북데이"
-            android:textSize="48dp" />
-    </LinearLayout>
-
-
-    <EditText
-        android:id="@+id/editText_login_email"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="이메일"
-        android:inputType="textEmailAddress" />
-
-    <EditText
-        android:id="@+id/editText_login_password"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="비밀번호"
-        android:inputType="textPassword" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/rootLayout"
+        >
 
         <LinearLayout
-            android:id="@+id/linearLayout_login_rememberMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <CheckBox
-                android:id="@+id/checkBox_login_rememberMe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/imageView_login_logo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@mipmap/ic_splash" />
 
             <TextView
-                android:id="@+id/textView_login_rememberMe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="나를 기억하기" />
-
+                android:text="북데이"
+                android:textSize="48dp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView_login_findPassword"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="비밀번호를 잊으셨나요?"
-            android:textColor="@color/signiture"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--    로그인, 회원가입 버튼 묶음-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/button_login_defaultLogin"
+        <EditText
+            android:id="@+id/editText_login_email"
             android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:background="@drawable/common_btn_shape"
-            android:backgroundTint="@color/signiture"
-            android:text="로그인"
-            android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:layout_height="48dp"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="이메일"
+            android:inputType="textEmailAddress" />
 
-        <ImageView
-            android:id="@+id/imageView_login_kakaoLogin"
+        <EditText
+            android:id="@+id/editText_login_password"
             android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:src="@drawable/kakao_login_large_wide"
+            android:layout_height="48dp"
             android:layout_marginTop="16dp"
-            />
+            android:ems="10"
+            android:hint="비밀번호"
+            android:inputType="textPassword" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout_login_signUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="16dp"
-            >
-            <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/linearLayout_login_rememberMe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="계정이 없으면  "
-                android:textSize="12dp" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <CheckBox
+                    android:id="@+id/checkBox_login_rememberMe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/textView_login_rememberMe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="나를 기억하기" />
+
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textView_login_forgotPassword"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="회원가입"
-                android:textSize="16dp"
+                android:text="비밀번호를 잊으셨나요?"
                 android:textColor="@color/signiture"
-                android:textStyle="bold|normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--    로그인, 회원가입 버튼 묶음-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_login_defaultLogin"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:background="@drawable/common_btn_shape"
+                android:backgroundTint="@color/signiture"
+                android:text="로그인"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView_login_kakaoLogin"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:src="@drawable/kakao_login_large_wide"
+                android:layout_marginTop="16dp"
                 />
 
+            <LinearLayout
+                android:id="@+id/linearLayout_login_signUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="16dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="계정이 없다면  "
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="회원가입"
+                    android:textSize="16dp"
+                    android:textColor="@color/signiture"
+                    android:textStyle="bold|normal"
+                    />
+
+            </LinearLayout>
+
+
+
         </LinearLayout>
-
-
-
     </LinearLayout>
+
+
 
 
 </LinearLayout>

@@ -2,5 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="dimmWhite">#fafafa</color>
     <color name="signiture">#ED8F27</color>
+    <color name="warn">#BF3434</color>
+    <color name="ok">#4CAC4F</color>
+
 </resources>
