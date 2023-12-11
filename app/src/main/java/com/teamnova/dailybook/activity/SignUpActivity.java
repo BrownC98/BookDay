@@ -191,6 +191,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        checkList = new ArrayList<>();
         checkList.add(new Pair<>(et_email, tv_email));
         checkList.add(new Pair<>(et_pw, tv_pw));
         checkList.add(new Pair<>(et_rePw, tv_rePw));

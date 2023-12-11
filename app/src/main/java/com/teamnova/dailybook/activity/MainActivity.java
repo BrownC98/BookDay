@@ -1,16 +1,20 @@
 package com.teamnova.dailybook.activity;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.teamnova.dailybook.R;
-import com.teamnova.dailybook.databinding.ActivityMainBinding;
+import com.teamnova.dailybook.fragment.MyBooksFragment;
+import com.teamnova.dailybook.fragment.ProfileFragment;
+import com.teamnova.dailybook.fragment.ReadFragment;
+import com.teamnova.dailybook.fragment.RecordFragment;
 
 /**
  * 각종 기능으로 접근하는 통로가 되는 액티비티
@@ -18,24 +22,42 @@ import com.teamnova.dailybook.databinding.ActivityMainBinding;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
+    BottomNavigationView bnv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        bnv = findViewById(R.id.bottom_navigation_view_main);
+        bnv.setOnItemSelectedListener(new ItemSelectedListner());
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
+    }
+
+    class ItemSelectedListner implements NavigationBarView.OnItemSelectedListener {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            int id = item.getItemId();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            Fragment fragment;
+
+            if (id == R.id.item_main_nav_mybooks) {
+                fragment = new MyBooksFragment();
+            } else if (id == R.id.item_main_nav_read) {
+                fragment = new ReadFragment();
+            } else if (id == R.id.item_main_nav_record) {
+                fragment = new RecordFragment();
+            } else if (id == R.id.item_main_nav_profile) {
+                fragment = new ProfileFragment();
+            } else {
+                return false;
+            }
+
+            transaction.replace(R.id.fragment_container_view_main, fragment).commit();
+
+            return true;
+        }
     }
 
 }

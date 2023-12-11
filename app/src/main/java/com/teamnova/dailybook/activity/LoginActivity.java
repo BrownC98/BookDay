@@ -176,7 +176,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         toast.setText("로그인 되었습니다.");
         toast.show();
-        Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         finish();
     }

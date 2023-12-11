@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/item_main_nav_mybooks"
+        android:icon="@drawable/main_nav_library"
+        android:title="내 서재" />
+
+    <item
+        android:id="@+id/item_main_nav_read"
+        android:icon="@drawable/main_nav_read"
+        android:title="책 읽기" />
+
+    <item
+        android:id="@+id/item_main_nav_record"
+        android:icon="@drawable/main_nav_record"
+        android:title="기록" />
+
+    <item
+        android:id="@+id/item_main_nav_profile"
+        android:icon="@drawable/main_nav_profile"
+        android:title="내 프로필" />
+
+</menu>
