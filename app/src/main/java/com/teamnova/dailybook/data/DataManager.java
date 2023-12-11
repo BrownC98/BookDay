@@ -2,6 +2,7 @@ package com.teamnova.dailybook.data;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
@@ -70,7 +71,7 @@ public class DataManager {
 //    }
 
     /**
-     * @param sp bookList or memoList
+//     * @param sp bookList or memoList
      * @return
      */
 //    private static String getNextId(SharedPreferences sp) {
@@ -95,7 +96,7 @@ public class DataManager {
 
 
     // 유저 데이터 순회해서 주어진 닉네임이 이미 존재하는지 검사
-    public  boolean containNickName(String nickName) {
+    public boolean containNickName(String nickName) {
         Map<String, ?> userMap = userSP.getAll();
         for (Map.Entry<String, ?> entry : userMap.entrySet()) {
             // key가 current_id or rememberMe 인 데이터는 패스
@@ -184,6 +185,23 @@ public class DataManager {
                 .putString(CONST.CURRENT_USER_ID, null)
                 .putBoolean(CONST.REMEMBER_ME, false)
                 .apply();
+    }
+
+    /**
+     *
+     * @param email - 로그아웃할 계정 이메일
+     * @param context - 현재 컨텍스트
+     * @param to - 로그아웃 하고 이동할 액티비티
+     */
+    public void logOut(String email, Context context, Class<?> to) {
+        userSP.edit()
+                .remove(CONST.CURRENT_USER_ID)
+                .remove(CONST.REMEMBER_ME)
+                .apply();
+
+        Intent intent = new Intent(context, to);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // 실행할 액티비티 제외한 나머지 액티비티 제거
+        context.startActivity(intent);
     }
 
     /**

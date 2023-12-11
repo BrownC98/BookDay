@@ -2,6 +2,8 @@ package com.teamnova.dailybook.dto;
 
 import android.net.Uri;
 
+import com.teamnova.dailybook.R;
+
 import java.util.ArrayList;
 
 /**
@@ -16,6 +18,7 @@ public class User {
 
     /**
      * 생성용
+     *
      * @param email
      * @param password
      * @param nickName
@@ -24,12 +27,13 @@ public class User {
         this.email = email;
         this.password = password;
         this.nickName = nickName;
-        this.imgUri = Uri.EMPTY;
+        this.imgUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.main_nav_profile);
         this.bookList = new ArrayList<>();
     }
 
     /**
-     * 카카오 계정으로 회원가입용
+     * 카카오 회원원가입용
+     *
      * @param email
      * @param password
      * @param nickName

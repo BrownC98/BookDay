@@ -9,11 +9,6 @@ import androidx.fragment.app.Fragment;
 
 import com.teamnova.dailybook.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyBooksFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MyBooksFragment extends Fragment {
 
 

@@ -12,7 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.teamnova.dailybook.R;
 import com.teamnova.dailybook.fragment.MyBooksFragment;
-import com.teamnova.dailybook.fragment.ProfileFragment;
+import com.teamnova.dailybook.fragment.AccountFragment;
 import com.teamnova.dailybook.fragment.ReadFragment;
 import com.teamnova.dailybook.fragment.RecordFragment;
 
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.item_main_nav_record) {
                 fragment = new RecordFragment();
             } else if (id == R.id.item_main_nav_profile) {
-                fragment = new ProfileFragment();
+                fragment = new AccountFragment();
             } else {
                 return false;
             }

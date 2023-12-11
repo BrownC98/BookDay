@@ -7,17 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.teamnova.dailybook.R;
 
 /**
- * 내 도서 목록 액티비티
+ * 비번 재발급 액티비티
+ * 이메일 인증 후 비번 재발급
  */
-public class MyBooksActivity extends AppCompatActivity {
-
+public class ChangePassWordActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_books);
-
-
-
+        setContentView(R.layout.activity_change_pass_word);
     }
 }

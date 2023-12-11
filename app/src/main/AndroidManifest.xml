@@ -16,15 +16,12 @@
         android:theme="@style/Theme.DailyBook"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ChangePassWordActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.MainActivity"
             android:exported="false"
             android:label="@string/title_activity_main" />
-        <activity
-            android:name=".activity.ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.MyBooksActivity"
-            android:exported="false" />
         <activity
             android:name=".activity.BookSerachActivity"
             android:exported="false" />

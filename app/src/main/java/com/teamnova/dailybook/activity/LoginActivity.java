@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         SplashScreen.installSplashScreen(this);
         setContentView(R.layout.activity_login);
 
+
         // DataManger 초기화
         DataManager.init(this);
         dm = DataManager.getInstance();
@@ -238,7 +239,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     // 비회원이면 회원가입 처리
                     // 카카오 로그인시 비밀번호는 kakao_ + 랜덤한 6자리 숫자로 결정됨
                     pw = "kakao_" + (int) (Math.random() * 1000000);
-                    dm.createUser(new User(email, pw, nickname, imgUrl));
+                    dm.createUser(new User(email, pw, nickname,imgUrl));
                     toast.setText("회원가입 완료");
                     toast.show();
                 } else {

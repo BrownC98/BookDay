@@ -19,6 +19,6 @@
     <item
         android:id="@+id/item_main_nav_profile"
         android:icon="@drawable/main_nav_profile"
-        android:title="내 프로필" />
+        android:title="계정" />
 
 </menu>
