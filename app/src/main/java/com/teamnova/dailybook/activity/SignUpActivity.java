@@ -1,4 +1,4 @@
-package com.teamnova.bookday.activity;
+package com.teamnova.dailybook.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +9,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.teamnova.bookday.R;
-import com.teamnova.bookday.data.DataManager;
-import com.teamnova.bookday.dto.User;
+import com.teamnova.dailybook.R;
+import com.teamnova.dailybook.data.DataManager;
+import com.teamnova.dailybook.dto.User;
 
 /**
  * 회원가입 액티비티

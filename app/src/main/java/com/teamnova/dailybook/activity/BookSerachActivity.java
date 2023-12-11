@@ -1,10 +1,11 @@
-package com.teamnova.bookday.activity;
+package com.teamnova.dailybook.activity;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.teamnova.bookday.R;
+import com.teamnova.dailybook.R;
+
 
 /**
  * 책 제목 입력 후 해당 제목으로 등록할지 검색할지 결정하는 액티비티

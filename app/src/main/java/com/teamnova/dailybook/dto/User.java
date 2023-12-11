@@ -1,4 +1,4 @@
-package com.teamnova.bookday.dto;
+package com.teamnova.dailybook.dto;
 
 import android.net.Uri;
 

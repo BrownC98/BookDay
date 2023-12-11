@@ -1,4 +1,4 @@
-package com.teamnova.bookday;
+package com.teamnova.dailybook;
 
 import android.content.Context;
 

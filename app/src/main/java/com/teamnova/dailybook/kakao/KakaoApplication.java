@@ -1,9 +1,9 @@
-package com.teamnova.bookday.kakao;
+package com.teamnova.dailybook.kakao;
 
 import android.app.Application;
 
 import com.kakao.sdk.common.KakaoSdk;
-import com.teamnova.bookday.BuildConfig;
+import com.teamnova.dailybook.BuildConfig;
 
 /**
  * 카카오 sdk를 초기화 해주기 위한 클래스

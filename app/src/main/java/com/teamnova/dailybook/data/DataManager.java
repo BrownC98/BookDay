@@ -1,4 +1,4 @@
-package com.teamnova.bookday.data;
+package com.teamnova.dailybook.data;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.teamnova.bookday.dto.User;
+import com.teamnova.dailybook.dto.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

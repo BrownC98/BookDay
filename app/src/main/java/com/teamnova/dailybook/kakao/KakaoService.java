@@ -1,7 +1,7 @@
-package com.teamnova.bookday.kakao;
+package com.teamnova.dailybook.kakao;
 
-import com.teamnova.bookday.BuildConfig;
-import com.teamnova.bookday.dto.Book;
+import com.teamnova.dailybook.BuildConfig;
+import com.teamnova.dailybook.dto.Book;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

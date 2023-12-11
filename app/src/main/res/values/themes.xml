@@ -1,17 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.BookDay" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Base.Theme.DailyBook" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
 
     </style>
 
-    <style name="Theme.BookDay" parent="Base.Theme.BookDay" >
+    <style name="Theme.DailyBook" parent="Base.Theme.DailyBook" >
     </style>
 
-    <style name="Theme.TeamNova.Splash" parent="Theme.SplashScreen">
+    <style name="Theme.DailyBook.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splashimage</item>
-        <item name="postSplashScreenTheme">@style/Theme.BookDay</item>
+        <item name="postSplashScreenTheme">@style/Theme.DailyBook</item>
     </style>
 </resources>

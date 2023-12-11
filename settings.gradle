@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "BookDay"
+rootProject.name = "DailyBook"
 include ':app'

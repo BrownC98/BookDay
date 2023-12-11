@@ -1,10 +1,10 @@
-package com.teamnova.bookday.activity;
+package com.teamnova.dailybook.activity;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.teamnova.bookday.R;
+import com.teamnova.dailybook.R;
 
 public class ProfileActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.teamnova.bookday.activity;
+package com.teamnova.dailybook.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -22,9 +22,9 @@ import androidx.core.splashscreen.SplashScreen;
 
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
-import com.teamnova.bookday.data.DataManager;
-import com.teamnova.bookday.R;
-import com.teamnova.bookday.dto.User;
+import com.teamnova.dailybook.R;
+import com.teamnova.dailybook.data.DataManager;
+import com.teamnova.dailybook.dto.User;
 
 import java.util.ArrayList;
 

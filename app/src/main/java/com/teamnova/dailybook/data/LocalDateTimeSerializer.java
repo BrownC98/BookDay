@@ -1,4 +1,4 @@
-package com.teamnova.bookday.data;
+package com.teamnova.dailybook.data;
 
 import android.annotation.SuppressLint;
 
