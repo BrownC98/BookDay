@@ -178,6 +178,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         toast.show();
         Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void moveToLink() {

@@ -13,18 +13,16 @@
         android:id="@+id/iv_login_ad"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:padding="8dp"
         android:background="@drawable/view_boarder"
-        android:src="@drawable/bookstore_yes24"
-        />
+        android:padding="8dp"
+        android:src="@drawable/bookstore_yes24" />
 
     <LinearLayout
+        style="@style/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:gravity="center_horizontal"
-        style="@style/rootLayout"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -122,17 +120,16 @@
                 android:id="@+id/imageView_login_kakaoLogin"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
-                android:src="@drawable/kakao_login_large_wide"
                 android:layout_marginTop="16dp"
-                />
+                android:src="@drawable/kakao_login_large_wide" />
 
             <LinearLayout
                 android:id="@+id/linearLayout_login_signUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="16dp"
-                >
+                android:gravity="center">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -143,19 +140,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="회원가입"
-                    android:textSize="16dp"
                     android:textColor="@color/signiture"
-                    android:textStyle="bold|normal"
-                    />
+                    android:textSize="16dp"
+                    android:textStyle="bold|normal" />
 
             </LinearLayout>
 
 
-
         </LinearLayout>
     </LinearLayout>
-
-
 
 
 </LinearLayout>

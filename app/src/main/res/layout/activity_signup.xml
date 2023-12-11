@@ -41,6 +41,13 @@
         android:hint="비밀번호"
         android:inputType="textPassword" />
 
+    <TextView
+        android:id="@+id/textView_signup_pwMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:visibility="invisible" />
+
     <EditText
         android:id="@+id/editText_signup_repassword"
         android:layout_width="match_parent"
