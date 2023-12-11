@@ -149,7 +149,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (v == ll_rememberMe) {
             cb_rememberMe.toggle();
         } else if (v == tv_forgotPw) {
-            // TODO : 비번찾기 구현
+            startActivity(new Intent(this, ChangePassWordActivity.class));
         } else if (v == btn_default_logIn) {
             logIn(et_email.getText().toString(), et_pw.getText().toString());
         } else if (v == iv_kakao_Login) {
