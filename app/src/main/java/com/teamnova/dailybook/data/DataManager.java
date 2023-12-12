@@ -9,10 +9,12 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.teamnova.dailybook.dto.Book;
 import com.teamnova.dailybook.dto.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -22,12 +24,13 @@ import java.util.Map;
  */
 public class DataManager {
 
+
     // 상수들을 묶어서 정리
-    private static class CONST {
-        private static final String TAG = "TAG";
-        private static final String KEY_LAST_PK = "LAST_PK";   // 마지막 pk를 나타내는 키값
-        private static final String CURRENT_USER_ID = "CURRENT_USER";
-        private static final String REMEMBER_ME = "REMEMBER_ME";
+    public static class CONST {
+        public static final String TAG = "TAG";
+        public static final String KEY_LAST_PK = "LAST_PK";   // 마지막 pk를 나타내는 키값
+        public static final String CURRENT_USER_ID = "CURRENT_USER";
+        public static final String REMEMBER_ME = "REMEMBER_ME";
     }
 
     private static DataManager instance;
@@ -70,21 +73,21 @@ public class DataManager {
 //        return ret;
 //    }
 
-    /**
+//    /**
 //     * @param sp bookList or memoList
-     * @return
-     */
-//    private static String getNextId(SharedPreferences sp) {
-//        String lastId = sp.getString(KEY_LAST_ID, null); // b_1, b_2 ...
+//     * @return
+//     */
+//    private String getNextId(SharedPreferences sp) {
+//        String lastId = sp.getString(CONST.KEY_LAST_PK, null); // b_1, b_2 ...
 //
 //        String nextId = makeNextId(sp, lastId);
 //
-//        sp.edit().putString(KEY_LAST_ID, nextId).apply();
+//        sp.edit().putString(CONST.KEY_LAST_PK, nextId).apply();
 //        return nextId;
 //    }
 //
 //    // 아이디 증가 문자열 처리 메소드
-//    private static String makeNextId(SharedPreferences sp, String lastId) {
+//    private String makeNextId(SharedPreferences sp, String lastId) {
 //        if (lastId == null) {
 //            if (sp == bookSP) lastId = "b_0";
 //            else if (sp == essaySP) lastId = "m_0";
@@ -129,16 +132,18 @@ public class DataManager {
         return 0;
     }
 
-
     /**
      * id에 해당하는 {@link User} 객체를 반환함
      * 찾는 객체가 없으면 null 반환
+     * <p>
+     * 사용자의 데이터를 가져오는 시점에서 책 삭제여부가 갱신되어야함
      *
      * @param email
      * @return
      */
     public User getUser(String email) {
-        return gson.fromJson(userSP.getString(email, null), User.class);
+        User user = gson.fromJson(userSP.getString(email, null), User.class);
+        return user;
     }
 
     /**
@@ -170,16 +175,8 @@ public class DataManager {
     }
 
     public void removeUser(String email) {
-//        // 논리적 삭제처리 - 보류
-//        User user = getUser(email);
-//        user.deleted = true;
-//        updateUser(user);
-        // 보유중인 책 제거
-        for (String bId : getUser(email).bookList) {
-            // TODO removeBook(email, bId);
-        }
 
-        // 현재 로그인 계정정보 초기화
+        // 계정 삭제 및 현재 로그인 계정정보 초기화
         userSP.edit()
                 .remove(email)
                 .putString(CONST.CURRENT_USER_ID, null)
@@ -188,10 +185,9 @@ public class DataManager {
     }
 
     /**
-     *
-     * @param email - 로그아웃할 계정 이메일
+     * @param email   - 로그아웃할 계정 이메일
      * @param context - 현재 컨텍스트
-     * @param to - 로그아웃 하고 이동할 액티비티
+     * @param to      - 로그아웃 하고 이동할 액티비티
      */
     public void logOut(String email, Context context, Class<?> to) {
         userSP.edit()
@@ -211,7 +207,9 @@ public class DataManager {
      * @return {@link User}
      */
     public User getCurrentUser() {
-        return getUser(getCurrentId());
+        User ret = getUser(getCurrentId());
+        Log.d("TAG", "getCurrentUser: " + ret);
+        return ret;
     }
 
     /**
@@ -228,60 +226,103 @@ public class DataManager {
     }
 
     public String getCurrentId() {
-        return userSP.getString(CONST.CURRENT_USER_ID, null);
+        String ret = userSP.getString(CONST.CURRENT_USER_ID, null);
+        return ret;
     }
 
     public boolean isRememberMe() {
         return userSP.getBoolean(CONST.REMEMBER_ME, false);
     }
 
-//    public static void createBook(User user, Book created) {
-//        if (bookSP.contains(created.id)) return;
-//        created.id = getNextId(bookSP);
-//        updateBook(created);
-//
-//        user.bookList.add(created.id); // 유저의 책 리스트에는 책 id만 저장한다.
-//        updateUser(user);
-//    }
-//
-//    public static void updateBook(Book book) {
-//
-//        if (book.imgpath == null) book.imgpath = Util.CONSTANT.EMPTY_STRING;
-//
-//        String bookJson = gson.toJson(book);
-//
-//        Log.d("TAG", "updateBook: \n" + bookJson);
-//
-//        bookSP.edit()
-//                .putString(book.id, bookJson)
-//                .apply();
-//    }
-//
-//    public static Book getBook(String id) {
-//        return gson.fromJson(bookSP.getString(id, null), Book.class);
-//    }
-//
-//    public static ArrayList<Book> getBookList(User user) {
-//        ArrayList<Book> ret = new ArrayList<>();
-//        for (String bId : user.bookList) {
-//            ret.add(getBook(bId));
-//        }
-//        return ret;
-//    }
-//
-//    public static void removeBook(String userId, String bookId) {
-//        // user객체의 책 id도 제거해야함
-//        User user = getUser(userId);
-//        user.bookList.removeIf(bId -> bId.equals(bookId));
-//        updateUser(user); // 보유한 책 목록에서 제거
-//
-//        // 책이 가지고 있던 메모를 셰어드에서 제거
-//        for (String mId : getBook(bookId).memoList) {
-//            removeMemo(bookId, mId);
-//        }
-//
-//        bookSP.edit().remove(bookId).apply();
-//    }
+    public void createBook(Book created) {
+        if (bookSP.contains(created.getPK())) return;
+        putBook(created);
+    }
+
+    public void addBookToUser(String email, Book book) {
+        User user = getUser(email);
+        user.bookList.add(book.getPK()); // 유저의 책 리스트에는 책 PK만 저장한다.
+        updateUser(user);
+    }
+
+    /**
+     * 책 정보에 대해 put 연산 수행
+     *
+     * @param book
+     */
+    public void putBook(Book book) {
+
+        if (book.thumbnail == null) book.thumbnail = "";
+
+        String bookJson = gson.toJson(book);
+
+        Log.d("TAG", "updateBook: \n" + bookJson);
+
+        bookSP.edit()
+                .putString(book.getPK(), bookJson)
+                .apply();
+
+        // owner의 보유 책에 추가
+        String userPK = book.owner;
+        User user = getUser(userPK);
+        // 중복된 책이 없으면 추가
+        if (!user.bookList.contains(book.getPK())) {
+            user.bookList.add(book.getPK());
+            updateUser(user);
+        }
+    }
+
+    public Book getBook(String pk) {
+        return gson.fromJson(bookSP.getString(pk, null), Book.class);
+    }
+
+    /**
+     * 입력받은 사용자의 책 목록 반환 (동기화 작업을 해주고 반환해줌)
+     *
+     * @param user
+     * @return
+     */
+    public ArrayList<Book> getBookList(User user) {
+        ArrayList<Book> ret = new ArrayList<>();
+        removeDeleteBookPK(user.email);
+
+        for (String bId : user.bookList) {
+            ret.add(getBook(bId));
+        }
+        return ret;
+    }
+
+    public void removeBook(String bookPK) {
+        bookSP.edit().remove(bookPK).apply();
+    }
+
+    public boolean containsBook(String bookPK) {
+        return bookSP.contains(bookPK);
+    }
+
+
+    /**
+     * 객체의 데이터를 셰어드 데이터에 맞춤
+     * 객체 데이터도 바뀌고 셰어드의 데이터도 바뀜
+     *
+     * @param userPK
+     * @return 처리된 user 객체 - 입력 객체와 동일한 객체임
+     */
+    public User removeDeleteBookPK(String userPK) {
+        User user = getUser(userPK);
+
+        // 사용자가 보유한 책 pk의 실존여부 검증
+        for (int idx = 0; idx < user.bookList.size(); idx++) {
+            String pk = user.bookList.get(idx);
+
+            // 존재하지 않는 pk 발견하면 해당 pk 제거
+            if (!containsBook(pk)) user.bookList.remove(idx);
+        }
+
+        updateUser(user);
+        return user;
+    }
+
 //
 //    public static void createMemo(Book book, Memo created) {
 //        if (essaySP.contains(created.id)) return;

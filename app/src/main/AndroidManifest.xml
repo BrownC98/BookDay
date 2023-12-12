@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".kakao.KakaoApplication"
@@ -16,6 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DailyBook"
         tools:targetApi="31">
+        <activity
+            android:name=".activity.AddBookCustomActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.BookDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AddBookActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.ChangePassWordActivity"
             android:exported="false" />

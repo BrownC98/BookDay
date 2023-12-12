@@ -1,14 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.MyBooksFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.MyBooksFragment"
+    android:orientation="vertical"
+    android:padding="@dimen/root_padding">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="내서재" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="내서재"
+        android:textSize="@dimen/font_big"
+        />
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_mybooks_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/view_boarder_dimmed"
+        />
+
+    <Button
+        android:id="@+id/button_mybooks_addbook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/signiture"
+        android:text="도서정보 추가"
+        android:textColor="@color/white"
+        android:layout_marginTop="8dp"
+        />
+
+
+</LinearLayout>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="@dimen/root_padding">
+
+            <TextView
+                android:id="@+id/textview_dialog_add_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="도서 정보를 입력해주세요"
+                android:textSize="24dp" />
+
+
+            <ImageView
+                android:id="@+id/imageView_select_dialog_img_c"
+                android:layout_width="260dp"
+                android:layout_height="314dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_add_book"
+                android:background="@drawable/view_boarder_dimmed"
+                 />
+
+
+            <TextView
+                android:id="@+id/textview_select_dialog_title_t_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="제목*"
+
+                android:textSize="24dp" />
+
+            <EditText
+                android:id="@+id/edittext_select_dialog_title_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                />
+
+            <TextView
+                android:id="@+id/textview_select_dialog_authors_t_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="저자"
+
+                android:textSize="24dp" />
+
+            <EditText
+                android:id="@+id/edittext_select_dialog_authors_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                />
+
+            <TextView
+                android:id="@+id/textview_select_dialog_translator_t_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="옮긴이"
+
+                android:textSize="24dp" />
+
+            <EditText
+                android:id="@+id/edittext_select_dialog_translator_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                />
+
+            <TextView
+                android:id="@+id/textview_select_dialog_publisher_t"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="출판사"
+                android:textSize="24dp" />
+
+            <EditText
+                android:id="@+id/edittext_select_dialog_publisher_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                />
+
+            <TextView
+                android:id="@+id/textview_select_dialog_pubdate_t_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="출판날짜"
+                android:textSize="24dp" />
+
+            <EditText
+                android:id="@+id/edittext_select_dialog_pubdate_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                />
+
+            <TextView
+                android:id="@+id/textview_select_dialog_contens_t_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="도서소개"
+                android:textSize="24dp" />
+
+            <EditText
+                android:id="@+id/edittext_select_dialog_contents_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+
+        <Button
+            android:id="@+id/button_select_dialog_no_c"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/view_boarder_dimmed"
+            android:text="취소"
+            android:textSize="20dp"
+            />
+
+        <Button
+            android:id="@+id/button_select_dialog_yes_c"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/signiture"
+            android:textColor="@color/dimmWhite"
+            android:text="저장"
+            android:textSize="20dp"
+            />
+    </LinearLayout>
+</LinearLayout>

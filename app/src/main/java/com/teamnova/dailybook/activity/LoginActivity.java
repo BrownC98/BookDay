@@ -65,8 +65,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
         // DataManger 초기화
-        DataManager.init(this);
+        DataManager.init(getApplicationContext());
         dm = DataManager.getInstance();
+
+        // 로그아웃 안하고 돌아오면 패스
+//        if(dm.getCurrentId() != null) {
+//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
 
         loginHandler = new Handler(Looper.myLooper()) {
             @Override

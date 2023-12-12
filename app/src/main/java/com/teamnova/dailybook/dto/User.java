@@ -16,6 +16,11 @@ public class User {
     public Uri imgUri; // 프사 이미지 경로
     public ArrayList<String> bookList; // book의 pk를 저장한 리스트 (나의 서재에 저장된)
 
+//    public ArrayList<String> getBookList() {
+//        DataManager.getInstance().removeDeleteBookPK(email);
+//        return bookList;
+//    }
+
     /**
      * 생성용
      *

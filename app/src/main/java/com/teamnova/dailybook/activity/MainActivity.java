@@ -11,8 +11,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.teamnova.dailybook.R;
-import com.teamnova.dailybook.fragment.MyBooksFragment;
 import com.teamnova.dailybook.fragment.AccountFragment;
+import com.teamnova.dailybook.fragment.MyBooksFragment;
 import com.teamnova.dailybook.fragment.ReadFragment;
 import com.teamnova.dailybook.fragment.RecordFragment;
 
@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
         bnv = findViewById(R.id.bottom_navigation_view_main);
         bnv.setOnItemSelectedListener(new ItemSelectedListner());
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container_view_main, new MyBooksFragment()).commit();
 
     }
 
@@ -60,4 +62,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+
+    }
 }

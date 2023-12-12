@@ -43,6 +43,9 @@ public class ChangePassWordActivity extends AppCompatActivity {
 
     final int OK = 0;
     final int FAIL = 1;
+    final int COUNTDOW = 2;
+    int mRemainTimeSec;
+    private final int MAX_REMAIN_TIME = 300; //  이 시간 안에 인증코드를 입력해야함
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +64,13 @@ public class ChangePassWordActivity extends AppCompatActivity {
 
         // 인증코드 받기 -> 인증코드 입력 -> 비밀번호 변경
         button.setOnClickListener(v -> {
-            String txt = ((Button) v).getText().toString();
+            String buttonTxt = ((Button) v).getText().toString();
 
             // 이메일 발송결과 처리
             mHandler = new Handler(Looper.myLooper()) {
                 String code;
 
+                // 메일발송 결과에 따른 분기
                 @Override
                 public void handleMessage(@NonNull android.os.Message msg) {
                     code = (String) msg.obj;
@@ -78,6 +82,31 @@ public class ChangePassWordActivity extends AppCompatActivity {
                         et_first.setText("");
                         et_first.setInputType(InputType.TYPE_CLASS_TEXT);
                         et_first.setHint("인증코드를 입력해주세요");
+
+                        // 카운트 다운 보여주기 (재귀 핸들러로 ui 1초 마다 변경)
+                        tv_first.setVisibility(View.VISIBLE);
+                        tv_first.setTextColor(getColor(R.color.warn));
+                        mHandler.post(new Runnable() {
+                            int remainTimeSec = MAX_REMAIN_TIME; // 제한시간 5분
+
+                            @Override
+                            public void run() {
+                                if (remainTimeSec < 0) {
+                                    tv_first.setText("인증코드가 만료되었습니다. 다시 이메일을 입력해주세요.");
+                                    button.setText("인증코드 받기");
+                                    et_first.setText("");
+                                    et_first.setHint("가입할 때 사용한 이메일");
+                                    return;
+                                }
+
+                                mRemainTimeSec = remainTimeSec;
+                                String time = String.format("%02d : %02d", remainTimeSec / 60, remainTimeSec % 60);
+                                tv_first.setText("인증코드 입력까지 남은시간 : " + time);
+                                remainTimeSec -= 1;
+                                mHandler.postDelayed(this, 1000);
+                            }
+                        });
+
                     } else if (msg.what == FAIL) { // 발송실패
                         showToast("코드 발송 실패");
                         return;
@@ -85,7 +114,7 @@ public class ChangePassWordActivity extends AppCompatActivity {
                 }
             };
 
-            if (txt.equals("인증코드 받기")) {    // 입력받은 이메일로 코드 발송
+            if (buttonTxt.equals("인증코드 받기")) {    // 입력받은 이메일로 코드 발송
                 sendTo = et_first.getText().toString();
                 if (!DataManager.getInstance().containsUser(sendTo)) {
                     showToast("가입된 이메일이 아닙니다.");
@@ -93,7 +122,12 @@ public class ChangePassWordActivity extends AppCompatActivity {
                 }
                 sendEmail(sendTo);
 
-            } else if (txt.equals("인증코드 입력")) { // 입력받은 코드 검증
+            } else if (buttonTxt.equals("인증코드 입력")) { // 입력받은 코드 검증
+                // 제한시간 체크
+                if(mRemainTimeSec == 0){
+                    return;
+                }
+
                 if (mCode.equals(et_first.getText().toString())) {
                     // 밑에 et 하나 더 생겨서 비번입력, 확인입력 하고 종료
                     ll_check.setVisibility(View.VISIBLE);
@@ -108,7 +142,7 @@ public class ChangePassWordActivity extends AppCompatActivity {
                     tv_first.setVisibility(View.VISIBLE);
                     showToast("인증번호가 일치하지 않습니다.");
                 }
-            } else if (txt.equals("비밀번호 변경")) {   // 입력한 비밀번호 검증 후 변경
+            } else if (buttonTxt.equals("비밀번호 변경")) {   // 입력한 비밀번호 검증 후 변경
                 String first = et_first.getText().toString();
                 String second = et_second.getText().toString();
 
