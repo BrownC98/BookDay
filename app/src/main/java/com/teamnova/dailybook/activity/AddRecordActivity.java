@@ -63,6 +63,8 @@ public class AddRecordActivity extends AppCompatActivity implements OnDataPassed
     LocalDateTime startTime;
     LocalDateTime endTime;
 
+    Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -311,5 +313,31 @@ public class AddRecordActivity extends AppCompatActivity implements OnDataPassed
         if (from != null && from.equals("BookSearch")) {
             onActivityResult(333, RESULT_OK, intent);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed(); // 기본 행동을 막아야함
+
+        Dialog mdialog = new AlertDialog.Builder(AddRecordActivity.this)
+                .setTitle("저장되지 않은 데이터")
+                .setMessage("지금 나가면 독서기록이 사라집니다. 그래도 나갑니까?")
+                .setNegativeButton("아니오", (dialog, which) -> {
+                })
+                .setPositiveButton("예", (dialog, which) -> {
+                    dialog.dismiss();
+                    finish();
+                })
+                .setCancelable(true)
+                .create();
+
+        mdialog.show();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }
