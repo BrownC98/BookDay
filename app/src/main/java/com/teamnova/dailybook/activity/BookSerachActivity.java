@@ -1,5 +1,6 @@
 package com.teamnova.dailybook.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -54,6 +55,8 @@ public class BookSerachActivity extends AppCompatActivity {
     KakaoService service;
     String mQuery; // 검색 입력값
     int curPage = 1;
+    String from; // 호출자
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +65,7 @@ public class BookSerachActivity extends AppCompatActivity {
         searchView = findViewById(R.id.searchview_search_keyword);
         recyclerView = findViewById(R.id.recyclerview_booksearch_list);
 
+        from = getIntent().getStringExtra("from");
 
         DataManager dm = DataManager.getInstance();
 
@@ -89,16 +93,35 @@ public class BookSerachActivity extends AppCompatActivity {
         Button btn_no = dialog.findViewById(R.id.button_select_dialog_no);
 
         btn_yes.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            // 고른 책 셰어드에 저장
-            Book book = adapter.getmData().get(position);
-            dm.createBook(book);
-            Log.d("TAG", "검색해서 찾은 책 저장: " + book);
-            startActivity(intent);
-            Toast.makeText(this, "도서정보가 추가되었습니다.", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
+            if (from != null && from.equals("AddRecord")) {
+                Book book = adapter.getmData().get(position);
+
+                Intent result = new Intent();
+                result.putExtra("from", "BookSearch");
+                result.putExtra("title", book.title);
+                result.putExtra("authors", book.authors);
+                result.putExtra("translators", book.translators);
+                result.putExtra("publisher", book.publisher);
+                String strDate = book.dateTime == null ? null : book.dateTime.toString();
+                result.putExtra("dateTime", strDate);
+                result.putExtra("contents", book.contents);
+                result.putExtra("thumbnail", book.thumbnail);
+
+                setResult(Activity.RESULT_OK, result);
+                dialog.dismiss();
+                finish();
+            } else {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                // 고른 책 셰어드에 저장
+                Book book = adapter.getmData().get(position);
+                dm.createBook(book);
+                Log.d("TAG", "검색해서 찾은 책 저장: " + book);
+                startActivity(intent);
+                Toast.makeText(this, "도서정보가 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
         });
 
         btn_no.setOnClickListener(v -> dialog.dismiss());
@@ -182,7 +205,7 @@ public class BookSerachActivity extends AppCompatActivity {
         kakaoCallback(call);
     }
 
-    public void kakaoCallback(Call<KakaoBookSearchResult> call){
+    public void kakaoCallback(Call<KakaoBookSearchResult> call) {
         // 검색결과 콜백
         call.enqueue(new Callback<KakaoBookSearchResult>() {
             @Override
@@ -191,7 +214,7 @@ public class BookSerachActivity extends AppCompatActivity {
                     KakaoBookSearchResult result = response.body();
 
                     // 새 데이터가 도착하면 로딩창(마지막 요소) 제거
-                    if (adapter.mData.contains(null)){
+                    if (adapter.mData.contains(null)) {
                         adapter.mData.remove(null);
                         adapter.notifyDataSetChanged();
                     }

@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.teamnova.dailybook.dto.Book;
 import com.teamnova.dailybook.dto.Essay;
+import com.teamnova.dailybook.dto.ReadRecord;
 import com.teamnova.dailybook.dto.User;
 
 import java.time.LocalDateTime;
@@ -39,6 +40,7 @@ public class DataManager {
     public SharedPreferences userSP; // userLsit에는 현재 로그인한 계정의 정보(ID, 자동로그인 여부), 마지막으로 쓰인 ID값, user데이터 로 구성되어 있다.
     public SharedPreferences bookSP; // 마지막으로 쓰인 PK(b_1, b_2 ...)값, 책 데이터 들
     public SharedPreferences essaySP; // 마지막으로 쓰인 PK(m_1, m_2...)값, 책 데이터 들
+    public SharedPreferences recordSP; // 독서기록데이터 저장용
 
 
     private DataManager() {
@@ -66,6 +68,7 @@ public class DataManager {
         instance.userSP = context.getSharedPreferences("USER", Context.MODE_PRIVATE);
         instance.bookSP = context.getSharedPreferences("BOOK", Context.MODE_PRIVATE);
         instance.essaySP = context.getSharedPreferences("ESSAY", Context.MODE_PRIVATE);
+        instance.recordSP = context.getSharedPreferences("RECORD", Context.MODE_PRIVATE);
     }
 
 
@@ -345,8 +348,32 @@ public class DataManager {
         return ret;
     }
 
-
     public boolean containsEssay(String essayPK) {
         return essaySP.contains(essayPK);
+    }
+
+    public void createRecord(ReadRecord created) {
+        // 중복생성 방지
+        if (essaySP.contains(created.getPK())) return;
+        putRecord(created);
+    }
+
+    public void putRecord(ReadRecord data) {
+
+        String dataJson = gson.toJson(data);
+
+        Log.d("TAG", "putEssay: \n" + dataJson);
+
+        recordSP.edit()
+                .putString(data.getPK(), dataJson)
+                .apply();
+    }
+
+    public ReadRecord getRecord(String pk) {
+        return gson.fromJson(recordSP.getString(pk, null), ReadRecord.class);
+    }
+
+    public void removeRecord(String pk) {
+        essaySP.edit().remove(pk).apply();
     }
 }

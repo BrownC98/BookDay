@@ -29,15 +29,20 @@ public class Book {
     public Book() {
     }
 
+    // 대괄호 제거
     public String getAuthors() {
         String origin = Arrays.toString(authors);
-        String ret;
+        String ret = origin;
 
         if (origin.length() == 0) {
             return origin;
         }
 
-        ret = origin.substring(1, origin.length() - 1);
+        if(origin.charAt(0) == '[' && origin.charAt(origin.length()-1) == ']'){
+            ret = origin.substring(1, origin.length() - 1);
+        }
+
+        if(ret.equals("null")) ret = null;
         return ret;
     }
 

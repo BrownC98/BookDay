@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:background="@color/signiture"
         android:text="도서정보 추가"
+        android:textStyle="bold"
         android:textColor="@color/white"
         android:layout_marginTop="8dp"
         />

@@ -1,5 +1,6 @@
 package com.teamnova.dailybook.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -37,6 +38,7 @@ public class AddBookActivity extends AppCompatActivity {
     DataManager dm;
     Uri imgUri;
     ImageView iv;
+    String from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +47,15 @@ public class AddBookActivity extends AppCompatActivity {
 
         dm = DataManager.getInstance();
 
+        from = getIntent().getStringExtra("from");
+
         btn_custom = findViewById(R.id.button_addbook_custom);
         btn_search = findViewById(R.id.button_addbook_search);
 
         btn_custom.setOnClickListener(new OnClickListener());
         btn_search.setOnClickListener(new OnClickListener());
 
+        // 다이얼로그 세팅
         dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
@@ -94,21 +99,43 @@ public class AddBookActivity extends AppCompatActivity {
             book.contents = et_content.getText().toString();
             book.thumbnail = imgUri.toString();
 
-            dm.createBook(book);
-            Log.d("TAG", "사용자 지정 저장 책 : " + book);
+            // 독서결과를 등록하기 위해 여기로 왔다면
+            if (from != null && from.equals("AddRecord")) {
+                Intent result = new Intent();
+                result.putExtra("title", book.title);
+                result.putExtra("authors", book.authors);
+                result.putExtra("translators", book.translators);
+                result.putExtra("publisher", book.publisher);
+                String strDate = book.dateTime == null ? null : book.dateTime.toString();
+                result.putExtra("dateTime", strDate);
+                result.putExtra("contents", book.contents);
+                result.putExtra("thumbnail", book.thumbnail);
+                setResult(Activity.RESULT_OK, result);
+                dialog.dismiss();
+                finish();
+            } else {
+                dm.createBook(book);
+                Log.d("TAG", "사용자 지정 저장 책 : " + book);
 
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 목적지에서 onCreate 호출 됨
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 목적지에서 onCreate 호출 됨
 
-
-            startActivity(intent);
-            Toast.makeText(this, "도서정보가 추가되었습니다.", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
+                startActivity(intent);
+                Toast.makeText(this, "도서정보가 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
         });
 
         btn_no.setOnClickListener(v -> dialog.dismiss());
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent receiveIntent = getIntent();
+        from = receiveIntent.getStringExtra("from");
     }
 
     @Override
@@ -120,6 +147,29 @@ public class AddBookActivity extends AppCompatActivity {
             Uri uri = data.getData();
             iv.setImageURI(uri);
             imgUri = uri;
+        }else if(requestCode == 555 && resultCode == RESULT_OK && data != null){ // 기록등록
+           String lFrom = data.getStringExtra("from");
+            String title = data.getStringExtra("title");
+            String authors = data.getStringExtra("authors");
+            String trans = data.getStringExtra("translators");
+            String pub = data.getStringExtra("publisher");
+            String date = data.getStringExtra("dateTime");
+            String cont = data.getStringExtra("contents");
+            String th = data.getStringExtra("thumbnail");
+
+            Intent result = new Intent();
+            result.putExtra("from", lFrom);
+            result.putExtra("title", title);
+            result.putExtra("authors", authors);
+            result.putExtra("translators", trans);
+            result.putExtra("publisher", pub);
+            //String strDate = book.dateTime == null ? null : book.dateTime.toString();
+            result.putExtra("dateTime", date);
+            result.putExtra("contents", cont);
+            result.putExtra("thumbnail", th);
+            setResult(Activity.RESULT_OK, result);
+            dialog.dismiss();
+            finish();
         }
     }
 
@@ -130,7 +180,9 @@ public class AddBookActivity extends AppCompatActivity {
             if (v == btn_custom) { // 다이얼로그 켜짐
                 dialog.show();
             } else if (v == btn_search) {
-                startActivity(new Intent(getApplicationContext(), BookSerachActivity.class));
+                Intent intent = new Intent(AddBookActivity.this, BookSerachActivity.class);
+                intent.putExtra("from", from);
+                startActivityForResult(intent, 555);
             } else if (v == iv) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");

@@ -23,7 +23,7 @@ import com.teamnova.dailybook.fragment.RecordFragment;
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bnv;
-
+    Fragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         bnv.setOnItemSelectedListener(new ItemSelectedListner());
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container_view_main, new MyBooksFragment()).commit();
-
     }
 
     class ItemSelectedListner implements NavigationBarView.OnItemSelectedListener {
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             int id = item.getItemId();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            Fragment fragment;
 
             if (id == R.id.item_main_nav_mybooks) {
                 fragment = new MyBooksFragment();

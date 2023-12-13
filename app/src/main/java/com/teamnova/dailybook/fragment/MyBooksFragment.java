@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.teamnova.dailybook.OnDataPassedListener;
 import com.teamnova.dailybook.R;
 import com.teamnova.dailybook.activity.AddBookActivity;
 import com.teamnova.dailybook.activity.BookDetailActivity;
@@ -32,6 +33,7 @@ public class MyBooksFragment extends Fragment {
     Button btn_add;
     RecyclerView recyclerview_bookList;
     BookAdapter bookAdapter;
+    String from;
 
     public MyBooksFragment() {
     }
@@ -68,15 +70,37 @@ public class MyBooksFragment extends Fragment {
         recyclerview_bookList = view.findViewById(R.id.recyclerview_mybooks_list);
 
         btn_add.setOnClickListener(new OnClickListener());
+        btn_add.setVisibility(View.VISIBLE);
+
+        // 특정 액티비티에서 온걸 여기서 감지한다.
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            from = bundle.getString("from");
+
+            // 내 서재에서 찾기
+            if (from.equals("AddRecord")) {
+                btn_add.setVisibility(View.GONE);
+            }
+        }
+
 
         // 리사이클러 뷰 세팅
         recyclerview_bookList.setLayoutManager(new LinearLayoutManager(getContext()));
         bookAdapter = new BookAdapter(getContext(), books);
         bookAdapter.setOnItemClickListener(((v, pos) -> {
+            String bookPK = books.get(pos).getPK();
+
+            // 선택한 책의 pk를 반환
+            if (from != null && from.equals("AddRecord")) {
+                ((OnDataPassedListener) getActivity()).onDataPassed(bookPK);
+                return;
+            }
+
+
             Intent intent = new Intent(getContext(), BookDetailActivity.class);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             // 책 PK 담아서 전송
-            String bookPK = books.get(pos).getPK();
+
             intent.putExtra("BOOK_PK", bookPK);
             Log.d("TAG", "onViewCreated: 데이터 전송 key : BOOK_PK -> " + bookPK);
             startActivity(intent);
