@@ -88,19 +88,18 @@ public class MyBooksFragment extends Fragment {
         recyclerview_bookList.setLayoutManager(new LinearLayoutManager(getContext()));
         bookAdapter = new BookAdapter(getContext(), books);
         bookAdapter.setOnItemClickListener(((v, pos) -> {
-            String bookPK = books.get(pos).getPK();
+            String bookPK =  bookAdapter.mData.get(pos).getPK();
 
-            // 선택한 책의 pk를 반환
+            // 기록용으로 여기 왔으면 선택한 책의 pk를 반환하고 종료
             if (from != null && from.equals("AddRecord")) {
                 ((OnDataPassedListener) getActivity()).onDataPassed(bookPK);
                 return;
             }
 
-
             Intent intent = new Intent(getContext(), BookDetailActivity.class);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            // 책 PK 담아서 전송
 
+            // 책 PK 담아서 전송
             intent.putExtra("BOOK_PK", bookPK);
             Log.d("TAG", "onViewCreated: 데이터 전송 key : BOOK_PK -> " + bookPK);
             startActivity(intent);

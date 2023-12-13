@@ -273,7 +273,7 @@ public class DataManager {
         Book book = getBook(bookPK);
         for (int i = 0; i < book.essayList.size(); i++) {
             String essayPK = book.essayList.get(i);
-            removeEssay(essayPK);   // book 셰어드의 보유 pk가 삭제되지만, 어차피 책 자체도 삭제되기 때문에 문제없음
+            removeEssay(essayPK);   // book 셰어드의 에세이 리스트의 pk가 삭제되지만, 어차피 책 자체도 삭제되기 때문에 문제없음
         }
 
         // user에도 삭제 상태를 반영한다.
