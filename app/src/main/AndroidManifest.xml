@@ -17,7 +17,7 @@
         android:theme="@style/Theme.DailyBook"
         tools:targetApi="31">
         <activity
-            android:name=".activity.AddBookCustomActivity"
+            android:name=".activity.EssayActivity"
             android:exported="false" />
         <activity
             android:name=".activity.BookDetailActivity"

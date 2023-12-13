@@ -1,37 +1,33 @@
 package com.teamnova.dailybook.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.teamnova.dailybook.R;
-import com.teamnova.dailybook.dto.Book;
+import com.teamnova.dailybook.dto.Essay;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
- * 개별 책 아이템을 표시하기 위한 아답터
+ * 개별 독후감 아이템을 표시하기 위한 아답터
  */
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
+public class EssayAdapter extends RecyclerView.Adapter<EssayAdapter.ViewHolder> {
 
-    public ArrayList<Book> mData = null;
+    public ArrayList<Essay> mData = new ArrayList<>();
     public Context context;
 
-    public BookAdapter(Context context, ArrayList<Book> list) {
+    public EssayAdapter(Context context, ArrayList<Essay> list) {
         this.context = context;
         this.mData = list;
     }
 
-    public void setmData(ArrayList<Book> mData) {
+    public void setmData(ArrayList<Essay> mData) {
         this.mData = mData;
         notifyDataSetChanged();
     }
@@ -51,10 +47,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     // * 커스텀 리스너 코드
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView textview_title;
-        TextView textview_author;
-        TextView textview_publisher;
+        TextView title;
+        TextView content;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -67,10 +61,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                 }
             });
 
-            imageView = itemView.findViewById(R.id.imageview_bookitem_bookimage);
-            textview_title = itemView.findViewById(R.id.textview_bookitem_title);
-            textview_author = itemView.findViewById(R.id.textview_bookitem_author);
-            textview_publisher = itemView.findViewById(R.id.textview_bookitem_publisher);
+            title = itemView.findViewById(R.id.textview_essay_item_title);
+            content = itemView.findViewById(R.id.textview_essay_item_content);
         }
     }
 
@@ -79,18 +71,17 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_book_item, parent, false);
+                .inflate(R.layout.recyclerview_essay_item, parent, false);
         return new ViewHolder(view);
     }
 
     // ViewHolder 값 세팅
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Book book = mData.get(position);
-        Glide.with(context).load(Uri.parse(book.thumbnail)).into(holder.imageView);
-        holder.textview_title.setText(book.title);
-        holder.textview_author.setText(Arrays.toString(book.authors).replace("[", "").replace("]", ""));
-        holder.textview_publisher.setText(book.publisher);
+        Essay essay = mData.get(position);
+        if(essay == null) return;
+        holder.title.setText(essay.title);
+        holder.content.setText(essay.content);
     }
 
     // 데이터 개수

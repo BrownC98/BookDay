@@ -14,7 +14,7 @@ public class User {
     public String password;
     public String nickName;
     public Uri imgUri; // 프사 이미지 경로
-    public ArrayList<String> bookList; // book의 pk를 저장한 리스트 (나의 서재에 저장된)
+    public ArrayList<String> bookList = new ArrayList<>(); // book의 pk를 저장한 리스트 (나의 서재에 저장된)
 
 //    public ArrayList<String> getBookList() {
 //        DataManager.getInstance().removeDeleteBookPK(email);
@@ -33,7 +33,6 @@ public class User {
         this.password = password;
         this.nickName = nickName;
         this.imgUri = Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.main_nav_profile);
-        this.bookList = new ArrayList<>();
     }
 
     /**

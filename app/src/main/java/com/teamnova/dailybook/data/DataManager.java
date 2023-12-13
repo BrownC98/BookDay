@@ -10,6 +10,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.teamnova.dailybook.dto.Book;
+import com.teamnova.dailybook.dto.Essay;
 import com.teamnova.dailybook.dto.User;
 
 import java.time.LocalDateTime;
@@ -67,36 +68,6 @@ public class DataManager {
         instance.essaySP = context.getSharedPreferences("ESSAY", Context.MODE_PRIVATE);
     }
 
-//    private static int getNextUserId() {
-//        int ret = userList.getInt(KEY_LAST_ID, -1) + 1;
-//        userList.edit().putInt(KEY_LAST_ID, ret).apply();
-//        return ret;
-//    }
-
-//    /**
-//     * @param sp bookList or memoList
-//     * @return
-//     */
-//    private String getNextId(SharedPreferences sp) {
-//        String lastId = sp.getString(CONST.KEY_LAST_PK, null); // b_1, b_2 ...
-//
-//        String nextId = makeNextId(sp, lastId);
-//
-//        sp.edit().putString(CONST.KEY_LAST_PK, nextId).apply();
-//        return nextId;
-//    }
-//
-//    // 아이디 증가 문자열 처리 메소드
-//    private String makeNextId(SharedPreferences sp, String lastId) {
-//        if (lastId == null) {
-//            if (sp == bookSP) lastId = "b_0";
-//            else if (sp == essaySP) lastId = "m_0";
-//        }
-//
-//        String arr[] = lastId.split("_");
-//        return arr[0] + "_" + (Integer.parseInt(arr[1]) + 1);
-//    }
-
 
     // 유저 데이터 순회해서 주어진 닉네임이 이미 존재하는지 검사
     public boolean containNickName(String nickName) {
@@ -136,7 +107,6 @@ public class DataManager {
      * id에 해당하는 {@link User} 객체를 반환함
      * 찾는 객체가 없으면 null 반환
      * <p>
-     * 사용자의 데이터를 가져오는 시점에서 책 삭제여부가 갱신되어야함
      *
      * @param email
      * @return
@@ -174,7 +144,19 @@ public class DataManager {
                 .apply();
     }
 
+    /**
+     * 유저삭제
+     * 유저하위의 책들과 에세이도 같이 삭제됨
+     *
+     * @param email
+     */
     public void removeUser(String email) {
+        // 하위 책 삭제, 책이 삭제되면 그 밑의 독후감도 같이 삭제된다.
+        User user = getUser(email);
+        for (int i = 0; i < user.bookList.size(); i++) {
+            String bookPK = user.bookList.get(i);
+            removeBook(bookPK); // 이게 실행될 때 하위 독후감도 삭제됨
+        }
 
         // 계정 삭제 및 현재 로그인 계정정보 초기화
         userSP.edit()
@@ -235,13 +217,13 @@ public class DataManager {
     }
 
     public void createBook(Book created) {
+        // 중복생성 방지
         if (bookSP.contains(created.getPK())) return;
         putBook(created);
-    }
 
-    public void addBookToUser(String email, Book book) {
-        User user = getUser(email);
-        user.bookList.add(book.getPK()); // 유저의 책 리스트에는 책 PK만 저장한다.
+        // owner의 보유 책에 추가
+        User user = getUser(created.ownerPK);
+        user.bookList.add(created.getPK());
         updateUser(user);
     }
 
@@ -261,15 +243,6 @@ public class DataManager {
         bookSP.edit()
                 .putString(book.getPK(), bookJson)
                 .apply();
-
-        // owner의 보유 책에 추가
-        String userPK = book.owner;
-        User user = getUser(userPK);
-        // 중복된 책이 없으면 추가
-        if (!user.bookList.contains(book.getPK())) {
-            user.bookList.add(book.getPK());
-            updateUser(user);
-        }
     }
 
     public Book getBook(String pk) {
@@ -277,14 +250,13 @@ public class DataManager {
     }
 
     /**
-     * 입력받은 사용자의 책 목록 반환 (동기화 작업을 해주고 반환해줌)
+     * 입력받은 사용자의 책 목록 반환
      *
      * @param user
      * @return
      */
     public ArrayList<Book> getBookList(User user) {
         ArrayList<Book> ret = new ArrayList<>();
-        removeDeleteBookPK(user.email);
 
         for (String bId : user.bookList) {
             ret.add(getBook(bId));
@@ -292,7 +264,20 @@ public class DataManager {
         return ret;
     }
 
+
     public void removeBook(String bookPK) {
+        // 하위 에세이를 삭제한다.
+        Book book = getBook(bookPK);
+        for (int i = 0; i < book.essayList.size(); i++) {
+            String essayPK = book.essayList.get(i);
+            removeEssay(essayPK);   // book 셰어드의 보유 pk가 삭제되지만, 어차피 책 자체도 삭제되기 때문에 문제없음
+        }
+
+        // user에도 삭제 상태를 반영한다.
+        User user = getUser(getBook(bookPK).ownerPK);
+        user.bookList.remove(bookPK);
+        updateUser(user);
+
         bookSP.edit().remove(bookPK).apply();
     }
 
@@ -302,67 +287,66 @@ public class DataManager {
 
 
     /**
-     * 객체의 데이터를 셰어드 데이터에 맞춤
-     * 객체 데이터도 바뀌고 셰어드의 데이터도 바뀜
+     * 독후감을 추가할 때, 해당 사실을 책 데이터에도 추가한다.
      *
-     * @param userPK
-     * @return 처리된 user 객체 - 입력 객체와 동일한 객체임
+     * @param created
      */
-    public User removeDeleteBookPK(String userPK) {
-        User user = getUser(userPK);
+    public void createEssay(Essay created) {
+        // 중복생성 방지
+        if (essaySP.contains(created.getPK())) return;
+        putEssay(created);
 
-        // 사용자가 보유한 책 pk의 실존여부 검증
-        for (int idx = 0; idx < user.bookList.size(); idx++) {
-            String pk = user.bookList.get(idx);
-
-            // 존재하지 않는 pk 발견하면 해당 pk 제거
-            if (!containsBook(pk)) user.bookList.remove(idx);
-        }
-
-        updateUser(user);
-        return user;
+        // 추가된 사실을 책 데이터에도 기록
+        Book book = getBook(created.bookPk);
+        book.essayList.add(created.getPK());
+        putBook(book);
     }
 
-//
-//    public static void createMemo(Book book, Memo created) {
-//        if (essaySP.contains(created.id)) return;
-//        created.id = getNextId(essaySP);
-//        updateMemo(created);
-//        book.memoList.add(created.id);
-//        updateBook(book);
-//    }
-//
-//    public static void updateMemo(Memo memo) {
-//        //if (!memoList.contains(memo.id)) return;
-//
-//        String memoJson = gson.toJson(memo);
-//
-//        Log.d("TAG", "updateMemo: \n" + memoJson);
-//
-//        essaySP.edit()
-//                .putString(memo.id, memoJson)
-//                .apply();
-//    }
-//
-//    public static Memo getMemo(String id) {
-//        return gson.fromJson(essaySP.getString(id, null), Memo.class);
-//    }
-//
-//    public static void removeMemo(String bookId, String memoId) {
-//        // 책의 메모리스트 정보도 갱신해야함
-//        Book book = getBook(bookId);
-//        book.memoList.removeIf(mId -> mId.equals(memoId));
-//        updateBook(book);
-//
-//        essaySP.edit().remove(memoId).apply();
-//    }
-//
-//    public static ArrayList<Memo> getMemoList(Book book) {
-//        ArrayList<Memo> ret = new ArrayList<>();
-//        for (String mId : book.memoList) {
-//            ret.add(getMemo(mId));
-//        }
-//        return ret;
-//    }
+    /**
+     * put 연산 실행
+     * 인자로 주어진 객체가 셰어드에 없으면 생성하고, 있으면 수정한다.
+     * 여기선 책 객체에 별도 처리를 하지 않는다.(이미 책에 추가되어 있기 때문이고, PK가 수정이 되진 않기 때문)
+     *
+     * @param essay
+     */
+    public void putEssay(Essay essay) {
 
+        String essayJson = gson.toJson(essay);
+
+        Log.d("TAG", "putEssay: \n" + essayJson);
+
+        essaySP.edit()
+                .putString(essay.getPK(), essayJson)
+                .apply();
+    }
+
+    public Essay getEssay(String pk) {
+        return gson.fromJson(essaySP.getString(pk, null), Essay.class);
+    }
+
+    /**
+     * @param pk
+     */
+    public void removeEssay(String pk) {
+        // 삭제 사실 책에도 반영
+        Book book = getBook(getEssay(pk).bookPk);
+        book.essayList.remove(pk); // remove는 equals()를 사용한다.
+        putBook(book);
+
+        essaySP.edit().remove(pk).apply();
+    }
+
+    public ArrayList<Essay> getEssayList(Book book) {
+        ArrayList<Essay> ret = new ArrayList<>();
+
+        for (String pk : book.essayList) {
+            ret.add(getEssay(pk));
+        }
+        return ret;
+    }
+
+
+    public boolean containsEssay(String essayPK) {
+        return essaySP.contains(essayPK);
+    }
 }

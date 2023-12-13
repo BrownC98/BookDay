@@ -1,6 +1,7 @@
 package com.teamnova.dailybook.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -21,23 +22,38 @@ public class Book {
     public String status;           // 판매 상태(정상, 품절, 절판 등) read only로 활용할 것
 
     public String PK; // 식별자
-    public String owner;    // 책 정보 소유자
+    public String ownerPK;    // 책 정보 소유자 PK(email)
     public String dataSource;   // 정보출처
+    public ArrayList<String> essayList = new ArrayList<>(); // 이 책에 딸린 독후감(독후감 pk가 담겨있음)
 
     public Book() {
     }
 
-    public Book(String owner, String dataSource) {
-        this.owner = owner;
+    public String getAuthors() {
+        String origin = Arrays.toString(authors);
+        String ret;
+
+        if (origin.length() == 0) {
+            return origin;
+        }
+
+        ret = origin.substring(1, origin.length() - 1);
+        return ret;
+    }
+
+    public Book(String ownerPK, String dataSource) {
+        this.ownerPK = ownerPK;
         this.dataSource = dataSource;
     }
 
     /**
      * 처음 입력한 값기반으로 PK 생성
+     *
      * @return
      */
     public String getPK() {
-        if (PK == null) PK = owner + title + dateTime + Arrays.toString(authors) + publisher + Arrays.toString(translators) + dataSource;
+        if (PK == null)
+            PK = title + ownerPK +  Arrays.toString(authors) + publisher + dataSource + hashCode();
         return PK;
     }
 

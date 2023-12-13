@@ -21,6 +21,7 @@ import com.teamnova.dailybook.activity.BookDetailActivity;
 import com.teamnova.dailybook.adapter.BookAdapter;
 import com.teamnova.dailybook.data.DataManager;
 import com.teamnova.dailybook.dto.Book;
+import com.teamnova.dailybook.dto.User;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,7 @@ public class MyBooksFragment extends Fragment {
     DataManager dm;
     Toast toast;
     Button btn_add;
-    RecyclerView bookList;
+    RecyclerView recyclerview_bookList;
     BookAdapter bookAdapter;
 
     public MyBooksFragment() {
@@ -59,17 +60,17 @@ public class MyBooksFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         toast = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);
 
-        //DataManager.init(getActivity());
         dm = DataManager.getInstance();
-        ArrayList<Book> books = dm.getBookList(dm.getCurrentUser());
+        User user = dm.getCurrentUser();
+        ArrayList<Book> books = dm.getBookList(user);
 
         btn_add = view.findViewById(R.id.button_mybooks_addbook);
-        bookList = view.findViewById(R.id.recyclerview_mybooks_list);
+        recyclerview_bookList = view.findViewById(R.id.recyclerview_mybooks_list);
 
         btn_add.setOnClickListener(new OnClickListener());
 
         // 리사이클러 뷰 세팅
-        bookList.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerview_bookList.setLayoutManager(new LinearLayoutManager(getContext()));
         bookAdapter = new BookAdapter(getContext(), books);
         bookAdapter.setOnItemClickListener(((v, pos) -> {
             Intent intent = new Intent(getContext(), BookDetailActivity.class);
@@ -77,10 +78,10 @@ public class MyBooksFragment extends Fragment {
             // 책 PK 담아서 전송
             String bookPK = books.get(pos).getPK();
             intent.putExtra("BOOK_PK", bookPK);
-            Log.d("TAG", "onViewCreated: 전송된 BOOK_PK -> " + bookPK);
+            Log.d("TAG", "onViewCreated: 데이터 전송 key : BOOK_PK -> " + bookPK);
             startActivity(intent);
         }));
-        bookList.setAdapter(bookAdapter);
+        recyclerview_bookList.setAdapter(bookAdapter);
     }
 
     @Override

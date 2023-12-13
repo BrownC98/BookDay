@@ -101,6 +101,7 @@ public class AddBookActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 목적지에서 onCreate 호출 됨
 
+
             startActivity(intent);
             Toast.makeText(this, "도서정보가 추가되었습니다.", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
