@@ -62,6 +62,7 @@ public class AddRecordActivity extends AppCompatActivity implements OnDataPassed
     Book loadedBook;
     ImageButton btn_delete;
     String recordPK;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -303,19 +304,22 @@ public class AddRecordActivity extends AppCompatActivity implements OnDataPassed
     public void onBackPressed() {
         //super.onBackPressed(); // 기본 행동을 막아야함
 
-        Dialog mdialog = new AlertDialog.Builder(AddRecordActivity.this)
-                .setTitle("저장되지 않은 데이터")
-                .setMessage("지금 나가면 독서기록이 사라집니다. 그래도 나갑니까?")
-                .setNegativeButton("아니오", (dialog, which) -> {
-                })
-                .setPositiveButton("예", (dialog, which) -> {
-                    dialog.dismiss();
-                    finish();
-                })
-                .setCancelable(true)
-                .create();
-
-        mdialog.show();
+        if (recordPK != null) {
+            finish();
+        } else {
+            Dialog mdialog = new AlertDialog.Builder(AddRecordActivity.this)
+                    .setTitle("저장되지 않은 데이터")
+                    .setMessage("지금 나가면 독서기록이 사라집니다. 그래도 나갑니까?")
+                    .setNegativeButton("아니오", (dialog, which) -> {
+                    })
+                    .setPositiveButton("예", (dialog, which) -> {
+                        dialog.dismiss();
+                        finish();
+                    })
+                    .setCancelable(true)
+                    .create();
+            mdialog.show();
+        }
     }
 
 

@@ -29,11 +29,11 @@ public class ReadFragment extends Fragment {
         START, PAUSE, STOP
     }
 
+    public static Chronometer chronometer;
     BUTTON_STATE currentState;
 
     Button btn_control;
     Button btn_stop;
-    Chronometer chronometer;
     long pauseTime = 0;
     long startTime = 0; // 시작시점
     long stopTime = 0; // 멈춘시점
@@ -132,6 +132,5 @@ public class ReadFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        chronometer.stop();
     }
 }

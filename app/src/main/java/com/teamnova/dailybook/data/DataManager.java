@@ -354,7 +354,7 @@ public class DataManager {
 
     public void createRecord(ReadRecord created) {
         // 중복생성 방지
-        if (essaySP.contains(created.getPK())) return;
+        if (recordSP.contains(created.getPK())) return;
         putRecord(created);
     }
 
@@ -374,7 +374,7 @@ public class DataManager {
     }
 
     public void removeRecord(String pk) {
-        essaySP.edit().remove(pk).apply();
+        recordSP.edit().remove(pk).apply();
     }
 
     public ArrayList<ReadRecord> getAllRecord() {

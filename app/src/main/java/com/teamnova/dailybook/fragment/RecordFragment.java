@@ -79,6 +79,13 @@ public class RecordFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        displayRecord(calendarView.getDate());
+
+    }
+
     // 주어진 날짜에(밀리초 단위) 맞는 기록 목록을 하단에 출력
     private void displayRecord(long dateMillis) {
         Calendar calendar = Calendar.getInstance();
@@ -91,7 +98,7 @@ public class RecordFragment extends Fragment {
         String selectedDate = year + "/" + month + "/" + dayOfMonth;
         Log.d("TAG", "displayRecord: " + selectedDate);
 
-        ll_record_list.removeAllViews(); // 초기화
+        ll_record_list.removeAllViews(); // 화면 초기화
 
         // 선택된 날짜와 일치하는 기록(시작날짜 기준) 가져오기
         // record를 일괄적으로 로딩을 해야함
@@ -103,7 +110,8 @@ public class RecordFragment extends Fragment {
 
                 // 뷰 생성하고 리니어 레이아웃에 add
                 View view = LayoutInflater.from(RecordFragment.this.getContext())
-                        .inflate(R.layout.linearlayout_record_item, ll_record_list, true);
+                        .inflate(R.layout.linearlayout_record_item, ll_record_list, false);
+
 
                 ImageView iv = view.findViewById(R.id.imageview_record_item_bookimage);
                 TextView tv_title = view.findViewById(R.id.textview_record_item_title);
@@ -132,6 +140,8 @@ public class RecordFragment extends Fragment {
                     intent.putExtra("recordPK", record.getPK());
                     startActivity(intent);
                 });
+
+                ll_record_list.addView(view);
 
             }
         }
