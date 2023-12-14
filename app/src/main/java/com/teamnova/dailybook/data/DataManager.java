@@ -376,4 +376,16 @@ public class DataManager {
     public void removeRecord(String pk) {
         essaySP.edit().remove(pk).apply();
     }
+
+    public ArrayList<ReadRecord> getAllRecord() {
+        Map<String, String> map = (Map<String, String>) recordSP.getAll();
+        ArrayList<ReadRecord> ret = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String value = entry.getValue();
+            ReadRecord obj = gson.fromJson(value, ReadRecord.class);
+            ret.add(obj);
+        }
+        return ret;
+    }
 }

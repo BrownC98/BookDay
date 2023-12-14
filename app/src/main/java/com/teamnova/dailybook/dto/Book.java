@@ -34,6 +34,9 @@ public class Book {
         String origin = Arrays.toString(authors);
         String ret = origin;
 
+        if(origin == null) return null;
+        if(origin.equals("null")) return null;
+
         if (origin.length() == 0) {
             return origin;
         }

@@ -39,13 +39,14 @@ public class ReadRecord {
     public String getRecordDay() {
         LocalDate date = startTime.toLocalDate();
         return date.getYear() + "/" + date.getMonthValue() + "/" + date.getDayOfMonth();
+        //return String.format("%02d/%02d/%02d", date.getYear(), date.getMonthValue() ,  date.getDayOfMonth());
     }
 
     // 독서 시작시간 ~ 독서 종료시간
     public String getRecordTime() {
         LocalTime sTime = startTime.toLocalTime();
         LocalTime eTime = endTime.toLocalTime();
-        return sTime.getHour() + ":" + sTime.getMinute() + "~" + eTime.getHour() + ":" + eTime.getMinute();
+        return sTime.getHour() + ":" + sTime.getMinute() + " - " + eTime.getHour() + ":" + eTime.getMinute();
     }
 
     public String getTotalElapsed() {

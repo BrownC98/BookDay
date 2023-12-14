@@ -16,7 +16,6 @@ import com.teamnova.dailybook.R;
 import com.teamnova.dailybook.dto.Book;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * 개별 책 아이템을 표시하기 위한 아답터
@@ -89,7 +88,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         Book book = mData.get(position);
         Glide.with(context).load(Uri.parse(book.thumbnail)).into(holder.imageView);
         holder.textview_title.setText(book.title);
-        holder.textview_author.setText(Arrays.toString(book.authors).replace("[", "").replace("]", ""));
+        holder.textview_author.setText(book.getAuthors());
         holder.textview_publisher.setText(book.publisher);
     }
 

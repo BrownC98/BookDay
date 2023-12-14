@@ -3,21 +3,15 @@ package com.teamnova.dailybook.activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +31,6 @@ import com.teamnova.dailybook.fragment.MyBooksFragment;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * 독서기록 등록 액티비티
@@ -64,7 +57,11 @@ public class AddRecordActivity extends AppCompatActivity implements OnDataPassed
     LocalDateTime endTime;
 
     Dialog dialog;
+    ReadRecord record;
 
+    Book loadedBook;
+    ImageButton btn_delete;
+    String recordPK;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,23 +79,39 @@ public class AddRecordActivity extends AppCompatActivity implements OnDataPassed
         ll_recored_book = findViewById(R.id.ll_record_book);
         btn_reset = findViewById(R.id.button_record_reset);
         tv_memo = findViewById(R.id.textview_add_record_memo);
+        btn_delete = findViewById(R.id.imageButton_record_delete);
+        btn_delete.setVisibility(View.GONE);
+
+        btn_delete.setOnClickListener(new OnClickListener());
 
         Intent intent = getIntent();
-        elapsedTime = intent.getLongExtra("elapsedTime", -1);
-        startTime = LocalDateTime.parse(intent.getStringExtra("startDT"));
-        endTime = LocalDateTime.parse(intent.getStringExtra("endDT"));
+        recordPK = intent.getStringExtra("recordPK");
+        if (recordPK != null) {   // 기록조회에서 온 것
+            btn_delete.setVisibility(View.VISIBLE);
+            record = dm.getRecord(recordPK);
+            recordDay.setText(record.getRecordDay());
+            recordTime.setText(record.getRecordTime());
+            tv_elapsed.setText("총 독서시간 : " + record.getTotalElapsed());
+            tv_memo.setText(record.memo);
+            Book loadedBook = dm.getBook(record.bookPk);
+            if (loadedBook != null) makeBookView(loadedBook);
+        } else {
+            elapsedTime = intent.getLongExtra("elapsedTime", -1);
+            startTime = LocalDateTime.parse(intent.getStringExtra("startDT"));
+            endTime = LocalDateTime.parse(intent.getStringExtra("endDT"));
 
-        LocalDate date = startTime.toLocalDate();
-        LocalTime sTime = startTime.toLocalTime();
-        LocalTime eTime = endTime.toLocalTime();
+            LocalDate date = startTime.toLocalDate();
+            LocalTime sTime = startTime.toLocalTime();
+            LocalTime eTime = endTime.toLocalTime();
 
-        int seconds = (int) (elapsedTime / 1000) % 60;
-        int minutes = (int) ((elapsedTime / (1000 * 60)) % 60);
-        int hours = (int) ((elapsedTime / (1000 * 60 * 60)) % 24);
+            int seconds = (int) (elapsedTime / 1000) % 60;
+            int minutes = (int) ((elapsedTime / (1000 * 60)) % 60);
+            int hours = (int) ((elapsedTime / (1000 * 60 * 60)) % 24);
 
-        recordDay.setText(date.getYear() + "/" + date.getMonthValue() + "/" + date.getDayOfMonth());
-        recordTime.setText(sTime.getHour() + ":" + sTime.getMinute() + "~" + eTime.getHour() + ":" + eTime.getMinute());
-        tv_elapsed.setText("총 독서시간 : " + String.format("%02d:%02d:%02d", hours, minutes, seconds));
+            recordDay.setText(date.getYear() + "/" + date.getMonthValue() + "/" + date.getDayOfMonth());
+            recordTime.setText(sTime.getHour() + ":" + sTime.getMinute() + "~" + eTime.getHour() + ":" + eTime.getMinute());
+            tv_elapsed.setText("총 독서시간 : " + String.format("%02d:%02d:%02d", hours, minutes, seconds));
+        }
 
         btn_save.setOnClickListener(new OnClickListener());
         btn_new.setOnClickListener(new OnClickListener());
@@ -127,28 +140,45 @@ public class AddRecordActivity extends AppCompatActivity implements OnDataPassed
                         .setNegativeButton("아니오", (dialog, which) -> {
                         })
                         .setPositiveButton("예", (dialog, which) -> {
-                            // 책정보 추가하기를 했으면 책정보 생성
-                            String newBookPK = null;
-                            if (newBook != null) {
-                                dm.createBook(newBook);
-                                newBookPK = newBook.getPK();
+                            String bookPk = null;
+
+                            // 책정보를 추가했다면
+                            if (loadedBook != null) {
+                                // 그게 새 책이라면
+                                if (newBook != null) {
+                                    dm.createBook(newBook); // 책데이터 셰어드에 생성
+                                }
+                                bookPk = loadedBook.getPK();
                             }
 
-                            String memo = tv_memo.getText().toString();
-                            long elapsed = elapsedTime;
-                            LocalDateTime start = startTime;
-                            LocalDateTime end = endTime;
+                            // 기록객체 생성
+                            if (record != null) {   // 수정상황이라면
+                                record.getPK();
+                                record.bookPk = bookPk;
+                                record.memo = tv_memo.getText().toString();
+                                dm.putRecord(record);
+                            } else {
+                                String memo = tv_memo.getText().toString();
+                                long elapsed = elapsedTime;
+                                LocalDateTime start = startTime;
+                                LocalDateTime end = endTime;
 
-                            ReadRecord readRecord = new ReadRecord(
-                                    newBookPK,
-                                    memo,
-                                    elapsed,
-                                    start,
-                                    end
-                            );
+                                ReadRecord readRecord = new ReadRecord(
+                                        bookPk,
+                                        memo,
+                                        elapsed,
+                                        start,
+                                        end
+                                );
 
-                            dm.createRecord(readRecord);
-                            // 기록객체 생성하고 스톱워치로 복귀
+//                            String d = readRecord.getRecordDay();
+//                            String t = readRecord.getRecordTime();
+//                            String e = readRecord.getTotalElapsed();
+
+                                // 기록객체 생성하고
+                                dm.createRecord(readRecord);
+                            }
+                            //스톱워치로 복귀
                             dialog.dismiss();
                             finish();
                         })
@@ -183,70 +213,23 @@ public class AddRecordActivity extends AppCompatActivity implements OnDataPassed
                 ll_recored_book.removeAllViews();
                 selectedBook = null;
                 newBook = null;
+            } else if (v == btn_delete) {
+                Dialog mdialog = new AlertDialog.Builder(AddRecordActivity.this)
+                        .setTitle("기록 삭제")
+                        .setMessage("이 기록을 삭제하시겠습니까?")
+                        .setNegativeButton("아니오", (dialog, which) -> {
+                        })
+                        .setPositiveButton("예", (dialog, which) -> {
+                            dm.removeRecord(recordPK);
+                            dialog.dismiss();
+                            finish();
+                        })
+                        .setCancelable(true)
+                        .create();
+
+                mdialog.show();
             }
         }
-    }
-
-    public Dialog getBookAddDialog() {
-        // 다이얼로그 세팅
-        Dialog dialog = new Dialog(AddRecordActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-        dialog.setContentView(R.layout.dialog_select_custom_add_book);
-        iv = dialog.findViewById(R.id.imageView_select_dialog_img_c);
-        EditText et_title = dialog.findViewById(R.id.edittext_select_dialog_title_c);
-        EditText et_author = dialog.findViewById(R.id.edittext_select_dialog_authors_c);
-        EditText et_translator = dialog.findViewById(R.id.edittext_select_dialog_translator_c);
-        EditText et_publisher = dialog.findViewById(R.id.edittext_select_dialog_publisher_c);
-        EditText et_pubdate = dialog.findViewById(R.id.edittext_select_dialog_pubdate_c);
-        EditText et_content = dialog.findViewById(R.id.edittext_select_dialog_contents_c);
-        Button btn_yes = dialog.findViewById(R.id.button_select_dialog_yes_c);
-        Button btn_no = dialog.findViewById(R.id.button_select_dialog_no_c);
-
-        btn_yes.setText("추가하기");
-
-        imgUri = Uri.parse("android.resource://" + AddRecordActivity.this.getPackageName() + "/" + R.drawable.splashimage);
-        iv.setImageURI(imgUri); // 초기값
-        iv.setOnClickListener(v1 -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivityForResult(intent, AddRecordActivity.this.hashCode());
-        });
-        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
-        dialog.getWindow().setAttributes(params);
-        // 등록하기 누르면
-        btn_yes.setOnClickListener(v2 -> {
-
-            Book book = new Book(dm.getCurrentId(), "custom");
-            book.title = et_title.getText().toString();
-            book.authors = new String[]{et_author.getText().toString()};
-            book.translators = new String[]{et_translator.getText().toString()};
-            book.publisher = et_publisher.getText().toString();
-
-            String dateString = et_pubdate.getText().toString();
-            LocalDateTime localDateTime;
-            try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                localDateTime = LocalDateTime.parse(dateString, formatter);
-            } catch (Exception e) {
-                localDateTime = null;
-            }
-            book.dateTime = localDateTime;
-            book.contents = et_content.getText().toString();
-            book.thumbnail = imgUri.toString();
-
-            // 새로운 책정보 저장은 결과장츼 저장하기 버튼을 누른 시점에서 해야함
-            dm.createBook(book);
-            Log.d("TAG", "사용자 지정 저장 책 : " + book);
-            Toast.makeText(AddRecordActivity.this, "도서정보가 추가되었습니다.", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
-        });
-
-        btn_no.setOnClickListener(v2 -> dialog.dismiss());
-
-        return dialog;
     }
 
     @Override
@@ -302,6 +285,7 @@ public class AddRecordActivity extends AppCompatActivity implements OnDataPassed
         String author = book.getAuthors();
         tv_author.setText(author);
         tv_publisher.setText(book.publisher);
+        loadedBook = book;
     }
 
     @Override
